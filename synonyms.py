@@ -68,7 +68,7 @@ def build_semantic_descriptors_from_files(filenames):
     text_list = []
     #loops through all the files and concatenates them together
     for files in filenames:
-        file_text += open(files, "r", encoding="utf-8").read()
+        file_text += open(files, "r", encoding="utf-8").read().replace("\ufeff","",1)
         file_text += " "
 
     #cleans up punctuation and capitalization, makes all sentence-ending-punctuation into "." to make for easy splitting
@@ -105,46 +105,59 @@ def most_similar_word(word, choices, semantic_descriptors, similarity_fn):
 
 def run_similarity_test(filename, semantic_descriptors, similarity_fn):
     #reads in all the questions from text and splits them into lists, one line (thus question) per list
-    file_text = open(filename, "r", encoding="utf-8").read().split("/n")
+    file_text = open(filename, "r", encoding="utf-8").read().replace("\ufeff","",1).split("\n")
     answers_correct = 0
 
     #checks if the question that most_similar_word returns is the same as the one specified, if so, increments correct_answers
     for question in file_text:
-        if question[1] == most_similar_word(question[0], question[2:len(question), semantic_descriptors, similarity_fn]):
+        question = question.split(" ")
+        if question[1] == most_similar_word(question[0], question[2:len(question)], semantic_descriptors, similarity_fn):
             answers_correct += 1
 
     #converts number of correct_answers into a percent of the total number of questions
     return answers_correct/len(file_text)*100
 
 if __name__ == "__main__":
-    d = {"potato":1, "hi":2}
-    for j, k in d.items():
-        print(j)
-        print(k)
+    # d = {"potato":1, "hi":2}
+    # for j, k in d.items():
+    #     print(j)
+    #     print(k)
+    #
+    # d1 = {"i": 3, "am": 3, "a": 2, "sick": 1, "spiteful": 1, "an": 1, "unattractive": 1}
+    # d2 = {"i": 1, "believe": 1, "my": 1, "is": 1, "diseased": 1}
+    # print(cosine_similarity(d1,d2))
+    #
+    # sentences = [['i', 'am', 'a', 'sick', 'man'],
+    # ['i', 'am', 'a', 'spiteful', 'man'],
+    # ['i', 'am', 'an', 'unattractive', 'man'],
+    # ['i', 'believe', 'my', 'liver', 'is', 'diseased'],
+    # ['however', 'i', 'know', 'nothing', 'at', 'all', 'about', 'my', 'disease', 'and', 'do', 'not', 'know', 'for', 'certain', 'what', 'ails', 'me']]
+    #
+    # #print_sq_dict(build_semantic_descriptors(sentences))
+    # x = build_semantic_descriptors_from_files(["text.txt"])
+    # print(x == build_semantic_descriptors(sentences))
+    # print_sq_dict(build_semantic_descriptors_from_files(["text.txt"]))
+    #
+    # y = "hi"
+    # print(y)
+    # y = 5
+    # print(y)
+    #
+    # list = [1,2,3,4,5,6]
+    # for j in range(1):
+    #     for i in list:
+    #         print(i)
+    #         list.remove(i)
+    # print(list)
+    #
+    # dict = {"wer":1, "were":2}
+    # dict2 = {}
+    # for key in dict:
+    #     dict2[key] = dict[key]
+    # print(dict)
+    # print(dict2)
+    # del dict2["wer"]
+    # print(dict)
+    # print(dict2)
 
-    d1 = {"i": 3, "am": 3, "a": 2, "sick": 1, "spiteful": 1, "an": 1, "unattractive": 1}
-    d2 = {"i": 1, "believe": 1, "my": 1, "is": 1, "diseased": 1}
-    print(cosine_similarity(d1,d2))
-
-    sentences = [['i', 'am', 'a', 'sick', 'man'],
-    ['i', 'am', 'a', 'spiteful', 'man'],
-    ['i', 'am', 'an', 'unattractive', 'man'],
-    ['i', 'believe', 'my', 'liver', 'is', 'diseased'],
-    ['however', 'i', 'know', 'nothing', 'at', 'all', 'about', 'my', 'disease', 'and', 'do', 'not', 'know', 'for', 'certain', 'what', 'ails', 'me']]
-
-    #print_sq_dict(build_semantic_descriptors(sentences))
-    x = build_semantic_descriptors_from_files(["text.txt"])
-    print(x == build_semantic_descriptors(sentences))
-    print_sq_dict(build_semantic_descriptors_from_files(["text.txt"]))
-
-    y = "hi"
-    print(y)
-    y = 5
-    print(y)
-
-    list = [1,2,3,4,5,6]
-    for j in range(1):
-        for i in list:
-            print(i)
-            list.remove(i)
-    print(list)
+    print(run_similarity_test("test.txt", build_semantic_descriptors_from_files(["pg2600.txt", "pg7178.txt"]),cosine_similarity))
