@@ -21,10 +21,11 @@ def cosine_similarity(vec1, vec2):
     #goes through every possible key in vec1 and vec2 and compares if they're the same
     for i in vec1:
         for j in vec2:
-            if i == j: #MAYBE NOT NEEDED
+            if i == j:
 
                 #sums their product if they are the same (as in a dot product?)
                 numerator += vec1[i] * vec2[j]
+                break
 
     #divides by the norm of the other 2 before returning
     return numerator/(norm(vec1)*norm(vec2))
@@ -35,14 +36,17 @@ def build_semantic_descriptors(sentences):
 
     #loops through every sentence
     for sentence in sentences:
+        #casts to set to remove duplicates
+        sentence_set = set(sentence)
+
         #check if word is already present in semantic_descriptors
-        for word in sentence:
+        for word in sentence_set:
             if word not in semantic_descriptors:
                 semantic_descriptors[word] = {}
 
             #if not in semantic_descriptors, calculate the new words to be associated with semantic_descriptors[j]
             #add in a new slot with value 1 if does not exist, else increment.
-            for second_word in set(sentence):
+            for second_word in sentence_set:
                 #makes sure the word does not appear in it's own semantic_descriptors
                 if second_word == word:
                     continue
@@ -67,18 +71,23 @@ def build_semantic_descriptors_from_files(filenames):
 
     #splits the file_text into the list of lists needed by build_semantic_descriptors
     for lines in file_text.split("."):
-        text_list.append(line.split())
+        text_list.append(lines.split())
 
     return build_semantic_descriptors(text_list)
 
 def most_similar_word(word, choices, semantic_descriptors, similarity_fn):
     result = ""
-    result_similarity = -999
+    result_similarity = -1
 
-    #computes the semantic similarity between every word in choices and word and retains the highest similarity
+    if word not in semantic_descriptors:
+        return -1
     for choice in choices:
-        if similarity_fn(semantic_descriptors[word], semantic_descriptors[choice]) > result_similarity:
+        if choice not in semantic_descriptors:
+            result = -1
+        calculated_similarity = similarity_fN(semantic_descriptors[word], semantic_descriptors[choice])
+        if calculated_similarity > result_similarity:
             result = choice
+            result_similarity = calculated_similarity
 
     return result
  #############################UNDERSTAND TEH FUCKING NULL CASE?!?!?!?! OF SIMILARITY_FN()##############################
@@ -107,3 +116,8 @@ if __name__ == "__main__":
     x = build_semantic_descriptors_from_files(["text.txt"])
     print(x == build_semantic_descriptors(sentences))
     print(build_semantic_descriptors_from_files(["text.txt"]))
+
+    y = "hi"
+    print(y)
+    y = 5
+    print(y)
