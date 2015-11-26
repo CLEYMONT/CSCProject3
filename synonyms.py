@@ -17,15 +17,16 @@ def print_sq_dict(dict):
 
 def cosine_similarity(vec1, vec2):
     numerator = 0
+    local_vec2 = vec2[:]#copy so as to during remove-time does not alter origional vector
 
     #goes through every possible key in vec1 and vec2 and compares if they're the same
     for i in vec1:
-        for j in range len(vec2):
-            if i == vec2[j]:
+        for j in range len(local_vec2):
+            if i == local_vec2[j]:
 
                 #sums their product if they are the same (as in a dot product?)
-                numerator += vec1[i] * vec2[j]
-                del vec2[j] #deletes so it is not checked again.
+                numerator += vec1[i] * local_vec2[j]
+                del local_vec2[j] #deletes so it is not checked again.
                 break
 
     #divides by the norm of the other 2 before returning
