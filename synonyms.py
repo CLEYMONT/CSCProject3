@@ -107,7 +107,7 @@ def run_similarity_test(filename, semantic_descriptors, similarity_fn):
 
     #checks if the question that most_similar_word returns is the same as the one specified, if so, increments correct_answers
     for question in file_text:
-        if question[1] = most_similar_word(question[0], question[2:len(question), semantic_descriptors, similarity_fn]):
+        if question[1] == most_similar_word(question[0], question[2:len(question), semantic_descriptors, similarity_fn]):
         answers_correct += 1
 
     #converts number of correct_answers into a percent of the total number of questions
