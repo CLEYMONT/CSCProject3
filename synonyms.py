@@ -4,11 +4,11 @@ def norm(vec):
     '''Return the norm of a vector stored as a dictionary,
     as described in the handout for Project 3.
     '''
-    
+
     sum_of_squares = 0.0  # floating point to handle large numbers
     for x in vec:
         sum_of_squares += vec[x] * vec[x]
-    
+
     return math.sqrt(sum_of_squares)
 
 def print_sq_dict(dict):
@@ -20,11 +20,12 @@ def cosine_similarity(vec1, vec2):
 
     #goes through every possible key in vec1 and vec2 and compares if they're the same
     for i in vec1:
-        for j in vec2:
-            if i == j:
+        for j in range len(vec2):
+            if i == vec2[j]:
 
                 #sums their product if they are the same (as in a dot product?)
                 numerator += vec1[i] * vec2[j]
+                del vec2[j] #deletes so it is not checked again.
                 break
 
     #divides by the norm of the other 2 before returning
@@ -76,15 +77,20 @@ def build_semantic_descriptors_from_files(filenames):
     return build_semantic_descriptors(text_list)
 
 def most_similar_word(word, choices, semantic_descriptors, similarity_fn):
-    result = ""
+    result = -1
     result_similarity = -1
 
+    #checks if the word being checked against is valid
     if word not in semantic_descriptors:
-        return -1
+        return result
+
+    #loops through every possible choice
     for choice in choices:
+        #if choice doesn't exist, break to next choice option
         if choice not in semantic_descriptors:
-            result = -1
-        calculated_similarity = similarity_fN(semantic_descriptors[word], semantic_descriptors[choice])
+            continue
+        #calcualtes similarity of present choice, if exceeds the previous, replace result and result_similarity
+        calculated_similarity = similarity_fn(semantic_descriptors[word], semantic_descriptors[choice])
         if calculated_similarity > result_similarity:
             result = choice
             result_similarity = calculated_similarity
@@ -94,7 +100,17 @@ def most_similar_word(word, choices, semantic_descriptors, similarity_fn):
 
 
 def run_similarity_test(filename, semantic_descriptors, similarity_fn):
-    pass
+    #reads in all the questions from text and splits them into lists, one line (thus question) per list
+    file_text = open(filename, "r", encoding="utf-8").read().split("/n")
+    answers_correct = 0
+
+    #checks if the question that most_similar_word returns is the same as the one specified, if so, increments correct_answers
+    for question in file_text:
+        if question[1] = most_similar_word(question[0], question[2:len(question), semantic_descriptors, similarity_fn]):
+        answers_correct += 1
+
+    #converts number of correct_answers into a percent of the total number of questions
+    return answers_correct/len(file_text)*100
 
 if __name__ == "__main__":
     d = {"potato":1, "hi":2}
@@ -121,3 +137,10 @@ if __name__ == "__main__":
     print(y)
     y = 5
     print(y)
+
+    list = [1,2,3,4,5,6]
+    for j in range(1):
+        for i in list:
+            print(i)
+            list.remove(i)
+    print(list)
