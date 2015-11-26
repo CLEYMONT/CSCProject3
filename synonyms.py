@@ -17,16 +17,19 @@ def print_sq_dict(dict):
 
 def cosine_similarity(vec1, vec2):
     numerator = 0
-    local_vec2 = vec2[:]#copy so as to during remove-time does not alter origional vector
+    local_vec2 = {} #copy so as to during remove-time does not alter origional vector
+
+    for key in vec2:#creates copy
+        local_vec2[key] = vec2[key]
 
     #goes through every possible key in vec1 and vec2 and compares if they're the same
-    for i in vec1:
-        for j in range(len(local_vec2)):
-            if i == local_vec2[j]:
+    for key1 in vec1:
+        for key2 in local_vec2:
+            if key1 == key2:
 
                 #sums their product if they are the same (as in a dot product?)
-                numerator += vec1[i] * local_vec2[j]
-                del local_vec2[j] #deletes so it is not checked again.
+                numerator += vec1[key1] * local_vec2[key2]
+                del local_vec2[key2] #deletes the used key as it will never be corresponded to again by a value in vec1
                 break
 
     #divides by the norm of the other 2 before returning
@@ -108,7 +111,7 @@ def run_similarity_test(filename, semantic_descriptors, similarity_fn):
     #checks if the question that most_similar_word returns is the same as the one specified, if so, increments correct_answers
     for question in file_text:
         if question[1] == most_similar_word(question[0], question[2:len(question), semantic_descriptors, similarity_fn]):
-        answers_correct += 1
+            answers_correct += 1
 
     #converts number of correct_answers into a percent of the total number of questions
     return answers_correct/len(file_text)*100
@@ -132,7 +135,7 @@ if __name__ == "__main__":
     #print_sq_dict(build_semantic_descriptors(sentences))
     x = build_semantic_descriptors_from_files(["text.txt"])
     print(x == build_semantic_descriptors(sentences))
-    print(build_semantic_descriptors_from_files(["text.txt"]))
+    print_sq_dict(build_semantic_descriptors_from_files(["text.txt"]))
 
     y = "hi"
     print(y)
