@@ -21,7 +21,7 @@ def cosine_similarity(vec1, vec2):
 
     #goes through every possible key in vec1 and vec2 and compares if they're the same
     for i in vec1:
-        for j in range len(local_vec2):
+        for j in range(len(local_vec2)):
             if i == local_vec2[j]:
 
                 #sums their product if they are the same (as in a dot product?)
